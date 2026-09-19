@@ -170,10 +170,8 @@ function applyLang(lang) {
 /* ── formatting ───────────────────────────────────────────────────────── */
 const fmtSpeed = (mbs) => (mbs >= 1 ? [mbs.toFixed(1), "MB/s"] : [(mbs * 1024).toFixed(0), "KB/s"]);
 const fmtEta = (s) => {
-  if (s === null || s === undefined || s <= 0) {
-        return "--";
-    }
-  s = Math.max(0, Math.round(s));
+  // null is the engine's "no meaningful estimate" (#85): same dash as any other unknown.
+  s = Math.max(0, Math.round(s || 0));
   if (!s) return "—";
   if (s >= 3600) return `${Math.floor(s / 3600)}h ${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}m`;
   if (s >= 60) return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;

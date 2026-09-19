@@ -763,6 +763,7 @@ class Engine:
                 self._proxy_status = "none_configured"
             else:
                 self._proxy_status = "empty_file"
+
         now = time.monotonic()
         # 1. Live Speed (3-second window for UI display)
         recent_live = [(t, b) for t, b in snap if t > now - 3.0]
@@ -771,6 +772,7 @@ class Engine:
             mbs = sum(b for _, b in recent_live) / span_live / 1_048_576
         else:
             mbs = 0.0
+
         # 2. Calculate smoothed eta rate
         recent_eta = [(t, b) for t, b in snap if t > now - 10.0]
         if len(recent_eta) > 1:
@@ -819,6 +821,7 @@ class Engine:
                 eta = raw_eta
         else:
             eta = None
+
         el = (t_end - t0) if t_end else ((now - t0) if t0 else 0.0)
         # No phase sentence here on purpose: the GUI owns wording and language,
         # so the engine ships numbers and a stage name instead of prose.
@@ -892,7 +895,6 @@ class Engine:
         # 3. Distinguish 0 valid proxies vs N valid proxies
         if self._proxies == 0:
             self._proxy_status = "empty_file"
-
         else:
             self._proxy_status = "loaded"
         return
